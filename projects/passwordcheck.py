@@ -1,7 +1,7 @@
 '''
 Password Leak Checker
 Using the HaveIBeenPwned API, check if your password appears in their list of leaked passwords
-Usage in terminal: $python passwordcheck.py password1 password2 password3
+Usage in terminal: python passwordcheck.py password1 password2 password3
 Can accept multiple password inputs at once
 '''
 
