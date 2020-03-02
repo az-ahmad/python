@@ -48,7 +48,7 @@ class Person(Branch,Bank):
             print('Insufficient funds')
 
     def getUsers(self):
-        print('Does nothing')
+        raise NotImplementedError("Function can only be called on Bank or Branch instances")
 
 person1 = Person('Mr Red',300,'Barclays','Mayfair')
 person2 = Person('Mr Blue',600,'Barclays','Mayfair')
