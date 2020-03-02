@@ -6,11 +6,15 @@ class Bank:
         self.bankname = bankname
     def __str__(self):
         print(f'You are at at {self.bankname} bank')
+        print('To list the users and their respective branches, call getUsers() on this object')
 
     def getUsers(self):
-        for a,b in _users.items():
-            if b[0] == self.bankname:
-                print(f'User : {a}, Branch: {b[1]}')
+        try:
+            for a,b in _users.items():
+                if b[0] == self.bankname:
+                    print(f'User : {a}, Branch: {b[1]}')
+        except:
+            print('Something went wrong!')
 
 
 class Branch(Bank):
@@ -21,11 +25,15 @@ class Branch(Bank):
     
     def __str__(self):
         print(f'You are at at {self.branchname} bank')
+        print('To list the users of this branch, call getUsers() on this object')
     
     def getUsers(self):
-        for a,b in _users.items():
-            if b[0] == self.bankname and b[1]== self.branchname:
-                print(a)
+        try:
+            for a,b in _users.items():
+                if b[0] == self.bankname and b[1]== self.branchname:
+                    print(a)
+        except:
+            print('Something went wrong!')
 
 class Person(Branch,Bank):
     global users
@@ -42,10 +50,13 @@ class Person(Branch,Bank):
         self.money += amount
     
     def withdraw(self,amount):
-        if amount<=self.money:
-            self.money -= amount
-        else:
-            print('Insufficient funds')
+        try:
+            if amount<=self.money:
+                self.money -= amount
+            else:
+                print('Insufficient funds')
+        except:
+            print('Something went wrong!')
 
     def getUsers(self):
         raise NotImplementedError("Function can only be called on Bank or Branch instances")
@@ -66,3 +77,6 @@ print(person1)
 
 bank1 = Bank('Barclays')
 bank1.getUsers()
+print('')
+branch1 = Branch('Halifax','Bricky')
+branch1.getUsers()
