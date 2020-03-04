@@ -95,7 +95,7 @@ def main():
                             newline = line.replace(line.split(',')[1], str(newAmount))
                             file.write(f'{newline}\n')
                             print(newline)
-                            '''
+
 
 
 
