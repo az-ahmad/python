@@ -1,5 +1,3 @@
-import fileinput
-
 class Bank:
     def __init__(self,bankname):
         self.bankname = bankname
@@ -63,6 +61,7 @@ class Person(Branch,Bank):
     def getUsers(self):
         raise NotImplementedError("Function can only be called on Bank or Branch instances")
 
+
 def main():
     try:
         print('\nHello and welcome to Online Banking\n')
@@ -82,25 +81,61 @@ def main():
                 for line in file:
                     if line.split(',')[0] == withdrawNameQuery:
                         print('Name:', line.split(',')[0], ', Money:', line.split(',')[1], ' Bank:', line.rstrip().split(',')[2] ,', Branch:', line.rstrip().split(',')[3])
-            print('\nPlease type \'1\' to withdraw money NOT IMPLEMENTED')
-            print('Please type \'2\' to deposit money NOT IMPLEMENTED')
+            print('\nPlease type \'1\' to withdraw money')
+            print('Please type \'2\' to deposit money\n')
             screenSelection = int(input('Enter your selection: '))
             if screenSelection==1:
-                withdrawAmount = int(input('How much would you like to withdraw? '))
-                with open('bankdata.txt', 'r+') as file:
-                    for line in file:
-                        if line.split(',')[0] == withdrawNameQuery and int(line.split(',')[1])>=withdrawAmount:
-                            newAmount = int(line.split(',')[1]) - withdrawAmount
-                            print(f'Your new balance is {newAmount}')
-                            newline = line.replace(line.split(',')[1], str(newAmount))
-                            file.write(f'{newline}\n')
-                            print(newline)
-
-
-
-
+                withdrawMoney(withdrawNameQuery)
+            elif screenSelection == 2:
+                depositMoney(withdrawNameQuery)
     except ValueError:
         raise ValueError
+
+
+def withdrawMoney(name):
+    withdrawAmount = int(input('\nHow much would you like to withdraw? '))
+    # Read in the file
+    with open('bankdata.txt', 'r') as file :
+        filedata = file.read().splitlines()
+        file.close()
+
+    for line in filedata:
+        if line.split(',')[0] == name and int(line.split(',')[1])>=withdrawAmount:
+            newAmount = int(line.split(',')[1]) - withdrawAmount
+            
+            newdata = line.replace(line.split(',')[1], str(newAmount))
+            print(f'{name}, you now have £{newAmount} in your bank account.')
+            
+            # Write the file out again
+            with open('bankdata.txt', 'w') as file :
+                for items in filedata:
+                    if items.split(',')[0] != name:
+                        file.write(f'{items}\n')
+                file.write(f'{newdata}\n')
+                file.close()
+        elif line.split(',')[0] == name and int(line.split(',')[1])<withdrawAmount:
+            print('Insufficient funds!')
+
+
+def depositMoney(name):
+    depositAmount = int(input('How much would you like to deposit? '))
+    with open('bankdata.txt', 'r') as file :
+        filedata = file.read().splitlines()
+        file.close()
+
+    for line in filedata:
+        if line.split(',')[0] == name:
+            newAmount = int(line.split(',')[1]) + depositAmount
+            
+            newdata = line.replace(line.split(',')[1], str(newAmount))
+            print(f'{name}, you now have £{newAmount} in your bank account.')
+            with open('bankdata.txt', 'w') as file :
+                for items in filedata:
+                    if items.split(',')[0] != name:
+                        file.write(f'{items}\n')
+                file.write(f'{newdata}\n')
+                file.close()
+
 
 def newCustomer():
     try:
@@ -112,10 +147,6 @@ def newCustomer():
     except ValueError:
         raise ValueError
     person1 = Person(newName,newMoney,newBank,newBranch)
-    # bank1 = Bank('Barclays')
-    # bank1.getUsers()
-
-
 
 
 if __name__=='__main__':
