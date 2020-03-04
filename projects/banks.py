@@ -154,7 +154,7 @@ def newCustomer():
     except ValueError:
         raise ValueError
     person1 = Person(newName,newMoney,newBank,newBranch)
-    print(f'Congratulations {newname}, your account has been created.')
+    print(f'Congratulations {newName}, your account has been created.')
     anotherAction()
 
 def anotherAction():
