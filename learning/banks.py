@@ -1,6 +1,7 @@
 class Bank:
     def __init__(self,bankname):
         self.bankname = bankname
+
     def __str__(self):
         print(f'You are at at {self.bankname} bank')
         print('To list the users and their respective branches, call getUsers() on this object')
@@ -31,18 +32,16 @@ class Branch(Bank):
                 if line.rstrip().split(',')[3] == self.branchname and line.split(',')[2] == self.bankname:
                     print('Name:', line.split(',')[0], ', Money:', line.split(',')[1])
 
-class Person(Branch,Bank):
-    global users
+
+class Person(Branch,Bank):    
     def __init__(self,name='John Smith',money=100,bankname='Halifax',branchname='Kensington'):
         Branch.__init__(self,bankname,branchname)
         self.name = name
         self.money = money
-        userDict = {self.name:[self.bankname,self.branchname]}
         with open('bankdata.txt', 'a+') as file:
             file.write(f'{self.name},{self.money},{self.bankname},{self.branchname}\n')
+            file.close()
         
-        # _users[self.name] = [self.bankname,self.branchname]
-
     def __str__(self):
         return(f'Your name is {self.name}, you have £{self.money} at the {self.branchname} {self.bankname}')
 
@@ -94,19 +93,14 @@ def main():
 
 def withdrawMoney(name):
     withdrawAmount = int(input('\nHow much would you like to withdraw? '))
-    # Read in the file
     with open('bankdata.txt', 'r') as file :
         filedata = file.read().splitlines()
         file.close()
-
     for line in filedata:
         if line.split(',')[0] == name and int(line.split(',')[1])>=withdrawAmount:
             newAmount = int(line.split(',')[1]) - withdrawAmount
-            
             newdata = line.replace(line.split(',')[1], str(newAmount))
             print(f'{name}, you now have £{newAmount} in your bank account.')
-            
-            # Write the file out again
             with open('bankdata.txt', 'w') as file :
                 for items in filedata:
                     if items.split(',')[0] != name:
@@ -122,11 +116,9 @@ def depositMoney(name):
     with open('bankdata.txt', 'r') as file :
         filedata = file.read().splitlines()
         file.close()
-
     for line in filedata:
         if line.split(',')[0] == name:
             newAmount = int(line.split(',')[1]) + depositAmount
-            
             newdata = line.replace(line.split(',')[1], str(newAmount))
             print(f'{name}, you now have £{newAmount} in your bank account.')
             with open('bankdata.txt', 'w') as file :
