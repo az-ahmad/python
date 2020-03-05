@@ -15,17 +15,17 @@ class Bank:
         print(f'You are at at {self.bankname} bank')
         print('To list the users and their respective branches, call getUsers() on this object')
 
-    def getUsers(self):
+    @classmethod
+    def getUsers(cls,bankname):
         try:
             with open('bankdata.txt', 'r') as file:
                 for line in file:
-                    if line.split(',')[2] == self.bankname:
+                    if line.split(',')[2] == bankname:
                         print('Name:', line.split(',')[0], ', Money:', line.split(',')[1], ', Branch:', line.rstrip().split(',')[3])
             file.close()
             branchQuery = input('\nIf you would like to query a specific branch, please enter the branch\'s name: ')
             if branchQuery:
-                branch = Branch(self.bankname,branchQuery)
-                branch.getUsers()
+                Branch.getUsers(bankname,branchQuery)
             else:
                 anotherAction()
         except:
@@ -41,11 +41,12 @@ class Branch(Bank):
         print(f'You are at at {self.branchname} bank')
         print('To list the users of this branch, call getUsers() on this object')
     
-    def getUsers(self):
+    @classmethod
+    def getUsers(cls, bankname, branchquery):
         try:
             with open('bankdata.txt', 'r') as file:
                 for line in file:
-                    if line.rstrip().split(',')[3] == self.branchname and line.split(',')[2] == self.bankname:
+                    if line.rstrip().split(',')[3] == branchquery and line.split(',')[2] == bankname:
                         print('Name:', line.split(',')[0], ', Money:', line.split(',')[1])
             anotherAction()
         except:
@@ -64,7 +65,8 @@ class Person(Branch,Bank):
     def __str__(self):
         return(f'Your name is {self.name}, you have £{self.money} at the {self.branchname} {self.bankname}')
 
-    def getUsers(self):
+    @staticmethod
+    def getUsers():
         raise NotImplementedError("Function can only be called on Bank or Branch instances")
 
 
@@ -79,24 +81,31 @@ def main():
             newCustomer()
         elif bankingScreen == 2:
             bankQuery = input('\nWhich bank would you like to query? ')
-            bank = Bank(bankQuery)
-            bank.getUsers()
+            Bank.getUsers(bankQuery)
         elif bankingScreen ==0:
-            withdrawNameQuery = input('\nPlease enter your name as it appears in your bank account: ')
-            with open('bankdata.txt', 'r') as file:
-                for line in file:
-                    if line.split(',')[0] == withdrawNameQuery:
-                        print('Name:', line.split(',')[0], ', Money:', line.split(',')[1], ', Bank:', line.rstrip().split(',')[2] ,', Branch:', line.rstrip().split(',')[3])
-            print('\nPlease type \'1\' to withdraw money')
-            print('Please type \'2\' to deposit money\n')
-            screenSelection = int(input('Enter your selection: '))
-            if screenSelection==1:
-                withdrawMoney(withdrawNameQuery)
-            elif screenSelection == 2:
-                depositMoney(withdrawNameQuery)
+            checkAccount()
+        else:
+            anotherAction()
+
     except ValueError:
         raise ValueError
 
+
+def checkAccount():
+    withdrawNameQuery = input('\nPlease enter your name as it appears in your bank account: ')
+    with open('bankdata.txt', 'r') as file:
+        for line in file:
+            if line.split(',')[0] == withdrawNameQuery:
+                print('Name:', line.split(',')[0], ', Money:', line.split(',')[1], ', Bank:', line.rstrip().split(',')[2] ,', Branch:', line.rstrip().split(',')[3])
+    print('\nPlease type \'1\' to withdraw money')
+    print('Please type \'2\' to deposit money\n')
+    screenSelection = int(input('Enter your selection: '))
+    if screenSelection==1:
+        withdrawMoney(withdrawNameQuery)
+    elif screenSelection == 2:
+        depositMoney(withdrawNameQuery)
+    else:
+        anotherAction()
 
 def withdrawMoney(name):
     try:
