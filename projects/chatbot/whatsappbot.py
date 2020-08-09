@@ -18,7 +18,7 @@ from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import CountVectorizer
 
 # change path to chromedriver
-driver = webdriver.Chrome('/Users/Aziz/Desktop/chatbot/chromedriver')
+driver = webdriver.Chrome('PATH TO CHROMEDRIVER')
 driver.get('https://web.whatsapp.com')  # open whatsapp web
 sleep(10)  # give time for user to scan QR code to sign in
 wait = WebDriverWait(driver, 600)
