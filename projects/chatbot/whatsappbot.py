@@ -1,5 +1,6 @@
 '''
-To use this bot, change the relevant strings on line 20, 24, and 48. The responses can be changed to anything of your choice!
+To use this bot, change the relevant strings on line 21, 25, and 49. The responses can be changed to anything of your choice!
+To do: Clean the code and implement proper error handling
 '''
 
 import time
