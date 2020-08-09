@@ -22,7 +22,7 @@ driver = webdriver.Chrome('/Users/Aziz/Desktop/chatbot/chromedriver')
 driver.get('https://web.whatsapp.com')  # open whatsapp web
 sleep(10)  # give time for user to scan QR code to sign in
 wait = WebDriverWait(driver, 600)
-target = '"Code(ine) and Sprite"'  # change name to the chat / group chat
+target = '"CHAT NAME / RECIPIENT NAME"'  # change name to the chat / group chat
 x_arg = ' //span[contains(@title, ' + target + ')]'  # search for chat name
 target = wait.until(ec.presence_of_element_located((By.XPATH, x_arg)))
 target.click()  # click on the chat to open it
